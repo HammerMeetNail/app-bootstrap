@@ -102,7 +102,10 @@ replace_token "__TEMPLATE_DEPLOY_SSH_PUBLIC_KEY__" "$DEPLOY_SSH_PUBLIC_KEY"
 # Update Go module path
 old_module="github.com/example/notes-template"
 if rg -q "$old_module" .; then
-  rg -l "$old_module" -g '!yearofbingo/**' -g '!.git/**' | while read -r file; do
+  rg -l "$old_module" \
+    -g '!yearofbingo/**' \
+    -g '!.git/**' \
+    -g '!scripts/template-init.sh' | while read -r file; do
     python - "$file" "$old_module" "$GO_MODULE" <<'PY'
 import sys
 from pathlib import Path

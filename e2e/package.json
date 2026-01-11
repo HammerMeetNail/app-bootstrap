@@ -1,0 +1,9 @@
+{
+  "name": "notes-template-e2e",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Playwright E2E tests for the notes template",
+  "devDependencies": {
+    "@playwright/test": "1.49.0"
+  }
+}

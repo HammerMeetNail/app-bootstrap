@@ -6,7 +6,7 @@ Create a new repository (a “template repo”) derived from `yearofbingo` that 
 ## Source Repo (required reference during implementation)
 This plan is authored in (and derived from) the Year of Bingo repository. The agent implementing the template should keep a checkout of the source repo available for reference and copy patterns from it:
 - Local path (this workspace): `/Users/dave/git/yearofbingo`
-- Upstream: `https://github.com/HammerMeetNail/yearofbingo`
+- Upstream: `https://github.com/example/notes-template`
 
 ## Decisions (locked in)
 - Local dev is **Podman-first** (Docker still supported where it already is, e.g. GitHub Actions).

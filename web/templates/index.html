@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A clean, fast notes app with email-based authentication.">
+  <meta name="theme-color" content="#1f2937">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="__TEMPLATE_PROJECT_NAME__">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:title" content="__TEMPLATE_PROJECT_NAME__">
+  <meta property="og:description" content="Capture ideas, keep them tidy, and sync securely.">
+  <meta property="og:url" content="{{.BaseURL}}/">
+  <title>__TEMPLATE_PROJECT_NAME__</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Instrument+Serif&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{.CSSPath}}">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗒️</text></svg>">
+</head>
+<body>
+  <a href="#main-container" class="skip-link">Skip to main content</a>
+
+  <div class="page">
+    <header class="header" role="banner">
+      <div class="container header-content">
+        <a href="#home" class="logo" aria-label="Notes home">
+          <span class="logo-icon" aria-hidden="true">🗒️</span>
+          <span>__TEMPLATE_PROJECT_NAME__</span>
+        </a>
+        <nav class="nav" id="nav" role="navigation" aria-label="Main navigation">
+          <!-- Populated by JS based on auth state -->
+        </nav>
+      </div>
+    </header>
+
+    <main class="main-content" role="main" id="main-content">
+      <div class="container" id="main-container">
+        <!-- Content rendered by JavaScript -->
+        <div class="loading-state" role="status" aria-live="polite">
+          <div class="spinner" aria-hidden="true"></div>
+          <p class="loading-message">Loading...</p>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer" role="contentinfo">
+      <div class="container footer-content">
+        <span class="footer-text" id="app-version">v0.0.0</span>
+        <nav class="footer-links" aria-label="Footer navigation">
+          <a href="#about">About</a>
+          <a href="#terms">Terms</a>
+          <a href="#privacy">Privacy</a>
+          <a href="#security">Security</a>
+        </nav>
+        <a href="#support" class="footer-support">Support</a>
+      </div>
+    </footer>
+  </div>
+
+  <div class="toast-container" id="toast-container" role="alert" aria-live="assertive" aria-atomic="true"></div>
+
+  <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal" id="modal">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modal-title"></h3>
+        <button class="modal-close" id="modal-close" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+
+  <script src="{{.APIJSPath}}"></script>
+  <script src="{{.AppJSPath}}"></script>
+</body>
+</html>

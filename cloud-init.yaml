@@ -1,0 +1,21 @@
+#cloud-config
+
+users:
+  - name: deploy
+    groups: [sudo]
+    shell: /bin/bash
+    sudo: ["ALL=(ALL) NOPASSWD:ALL"]
+    ssh_authorized_keys:
+      - __TEMPLATE_DEPLOY_SSH_PUBLIC_KEY__
+
+package_update: true
+package_upgrade: true
+packages:
+  - podman
+  - podman-compose
+
+runcmd:
+  - mkdir -p /opt/__TEMPLATE_PROJECT_SLUG__
+  - chown deploy:deploy /opt/__TEMPLATE_PROJECT_SLUG__
+
+final_message: "Cloud-init complete. Deploy directory: /opt/__TEMPLATE_PROJECT_SLUG__."

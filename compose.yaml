@@ -1,0 +1,113 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Containerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - SERVER_HOST=0.0.0.0
+      - SERVER_PORT=8080
+      - APP_ENV=development
+      - DEBUG=true
+      - DEBUG_LOG_MAX_CHARS=8000
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=__TEMPLATE_PROJECT_SLUG__
+      - DB_PASSWORD=__TEMPLATE_PROJECT_SLUG___dev_password
+      - DB_NAME=__TEMPLATE_PROJECT_SLUG__
+      - DB_SSLMODE=disable
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=
+      - REDIS_DB=0
+      # Email configuration for local development
+      - EMAIL_PROVIDER=smtp
+      - SMTP_HOST=mailpit
+      - SMTP_PORT=1025
+      - EMAIL_FROM_ADDRESS=__TEMPLATE_EMAIL_FROM_ADDRESS__
+      - EMAIL_FROM_NAME=__TEMPLATE_EMAIL_FROM_NAME__
+      - APP_BASE_URL=__TEMPLATE_APP_BASE_URL__
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
+    volumes:
+      - ./web:/app/web:ro
+    develop:
+      watch:
+        - action: rebuild
+          path: .
+          ignore:
+            - web/
+        - action: sync
+          path: ./web
+          target: /app/web
+
+  playwright:
+    build:
+      context: .
+      dockerfile: Containerfile.playwright
+    profiles:
+      - e2e
+    depends_on:
+      app:
+        condition: service_healthy
+    environment:
+      - PLAYWRIGHT_BASE_URL=${PLAYWRIGHT_BASE_URL:-http://app:8080}
+      - PLAYWRIGHT_HEADLESS=${PLAYWRIGHT_HEADLESS:-true}
+      - PLAYWRIGHT_BROWSERS=${PLAYWRIGHT_BROWSERS:-firefox}
+      - PLAYWRIGHT_WORKERS=${PLAYWRIGHT_WORKERS:-}
+      - PWDEBUG=${PWDEBUG:-}
+      - PLAYWRIGHT_OUTPUT_DIR=${PLAYWRIGHT_OUTPUT_DIR:-/test-results}
+      - PLAYWRIGHT_REPORT_DIR=${PLAYWRIGHT_REPORT_DIR:-/playwright-report}
+    volumes:
+      - ./:/app:ro
+      - ./test-results:/test-results
+      - ./playwright-report:/playwright-report
+    working_dir: /app
+    shm_size: "1gb"
+
+  postgres:
+    image: docker.io/library/postgres:16-alpine
+    environment:
+      - POSTGRES_USER=__TEMPLATE_PROJECT_SLUG__
+      - POSTGRES_PASSWORD=__TEMPLATE_PROJECT_SLUG___dev_password
+      - POSTGRES_DB=__TEMPLATE_PROJECT_SLUG__
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U __TEMPLATE_PROJECT_SLUG__ -d __TEMPLATE_PROJECT_SLUG__"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: docker.io/library/redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  mailpit:
+    image: docker.io/axllent/mailpit:latest
+    ports:
+      - "8025:8025"  # Web UI
+      - "1025:1025"  # SMTP
+    environment:
+      - MP_SMTP_AUTH_ACCEPT_ANY=1
+      - MP_SMTP_AUTH_ALLOW_INSECURE=1
+
+volumes:
+  postgres_data:
+  redis_data:

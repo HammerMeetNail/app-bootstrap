@@ -1,0 +1,62 @@
+# Run the production image from quay.io locally
+# Usage: podman compose -f compose.prod.yaml up
+#
+# This uses the same PostgreSQL and Redis setup as development,
+# but pulls the production container image instead of building locally.
+
+services:
+  app:
+    image: quay.io/__TEMPLATE_QUAY_NAMESPACE__/__TEMPLATE_IMAGE_NAME__:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - SERVER_HOST=0.0.0.0
+      - SERVER_PORT=8080
+      - APP_ENV=production
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=__TEMPLATE_PROJECT_SLUG__
+      - DB_PASSWORD=__TEMPLATE_PROJECT_SLUG___dev_password
+      - DB_NAME=__TEMPLATE_PROJECT_SLUG__
+      - DB_SSLMODE=disable
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=
+      - REDIS_DB=0
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  postgres:
+    image: docker.io/library/postgres:16-alpine
+    environment:
+      - POSTGRES_USER=__TEMPLATE_PROJECT_SLUG__
+      - POSTGRES_PASSWORD=__TEMPLATE_PROJECT_SLUG___dev_password
+      - POSTGRES_DB=__TEMPLATE_PROJECT_SLUG__
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U __TEMPLATE_PROJECT_SLUG__ -d __TEMPLATE_PROJECT_SLUG__"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: docker.io/library/redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+  redis_data:

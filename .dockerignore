@@ -1,0 +1,42 @@
+# Ignore pre-built dist assets (regenerated during build)
+web/static/dist/
+
+# Git
+.git
+.gitignore
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# Build artifacts
+server
+*.exe
+
+# Local caches
+.cache/
+.gocache/
+
+# Test artifacts
+coverage.out
+coverage.html
+test-results/
+playwright-report/
+
+# Local files
+*.local
+.env.local
+temp/
+
+# Plans and docs
+plans/
+*.md
+!migrations/*.md
+
+# Images
+*.png
+*.jpg
+*.jpeg
+*.gif

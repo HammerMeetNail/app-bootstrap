@@ -131,7 +131,11 @@ EOF_MARKER
 
 # Go module tidy (optional but recommended)
 if command -v go >/dev/null 2>&1; then
-  go mod tidy
+  if [[ -z "${SKIP_GO_MOD_TIDY:-}" ]]; then
+    go mod tidy
+  else
+    echo "Skipping go mod tidy (SKIP_GO_MOD_TIDY is set)."
+  fi
 fi
 
 echo ""

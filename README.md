@@ -11,6 +11,19 @@ A production-ready Go + vanilla JS template with email-based auth, Postgres + Re
 - Containerized unit tests and Playwright E2E.
 - CI/CD pipeline for tests, multi-arch builds, Quay push, and SSH deploy.
 
+## Prerequisites
+- Podman + podman-compose (for `make local`, `make test`, `make e2e`).
+- `rg` (ripgrep) and `python` on PATH for `make init`.
+- Go toolchain if you want `go mod tidy` during init (requires network access).
+
+## First Run
+```bash
+make init
+make local
+```
+
+Then visit `http://localhost:8080`.
+
 ## Quick Start (Local)
 ```bash
 make local
@@ -24,6 +37,8 @@ make test
 make e2e
 ```
 
+Note: `make e2e` resets the local stack and removes volumes.
+
 ## Template Initialization
 Run the template initializer to rewrite identifiers (project name, module path, image name, etc.).
 
@@ -32,6 +47,8 @@ make init
 ```
 
 See `template/README.md` for details and required inputs.
+
+Note: `make init` requires `rg` and `python`, and it runs `go mod tidy` unless you set `SKIP_GO_MOD_TIDY=1`.
 
 Optional GitHub bootstrap:
 ```bash

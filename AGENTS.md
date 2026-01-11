@@ -29,6 +29,11 @@ This project is a Go + vanilla JS webapp with email-based auth and a Notes featu
 ## Tests and verification
 - Unit tests: `make test` (or `go test ./...` and `node web/static/js/tests/runner.js`).
 - E2E: `make e2e` (Playwright).
+  - `make e2e` resets the local stack and removes volumes.
+
+## Init flow gotchas
+- `make init` requires `rg` and `python` on PATH.
+- `make init` runs `go mod tidy` unless `SKIP_GO_MOD_TIDY=1` is set (network required).
 
 ## Safety checks
 - Preserve `web/static/openapi.yaml` when APIs change.
